@@ -5,7 +5,6 @@ metadata:
   qwenpaw:
     emoji: "📅"
     requires:
-      bins: ["python3"]
       env: ["PINGCODE_CLIENT_ID", "PINGCODE_CLIENT_SECRET"]
 ---
 
@@ -27,8 +26,33 @@ metadata:
 | `PINGCODE_CLIENT_SECRET` | 应用 Client Secret |
 | `PINGCODE_BASE_URL` | API 根地址（可选，默认 `https://open.pingcode.com`）|
 
+**认证流程：** 详见 `auth/SKILL.md`
+
 ## 调用方式
 
+使用任意 HTTP 客户端，先获取 token，再调用 API：
+
+**curl:**
+```bash
+curl -s -H "Authorization: Bearer $TOKEN" "https://open.pingcode.com/v1/myself"
+```
+
+**Python:**
+```python
+import urllib.request, json
+req = urllib.request.Request(base_url + "/v1/myself")
+req.add_header("Authorization", "Bearer " + token)
+result = json.loads(urllib.request.urlopen(req).read())
+```
+
+**Go:**
+```go
+req, _ := http.NewRequest("GET", baseURL+"/v1/myself", nil)
+req.Header.Set("Authorization", "Bearer "+token)
+resp, _ := http.DefaultClient.Do(req)
+```
+
+或使用附带的 Python 便捷脚本：
 ```bash
 python3 {{baseDir}}/../scripts/pingcode.py '{{"method":"GET","path":"/v1/myself"}}'
 ```
@@ -71,7 +95,6 @@ python3 {{baseDir}}/../scripts/pingcode.py '{{"method":"GET","path":"/v1/myself"
 | `PATCH` | `/v1/pjm/projects/{project_id}/sprints/{sprint_id}` | 部分更新一个迭代 |
 | `PATCH` | `/v1/pjm/projects/{project_id}/sprint_sections/{section_id}` | 部分更新一个迭代分组 |
 | `PATCH` | `/v1/pjm/projects/{project_id}/sprint_categories/{sprint_category_id}` | 部分更新一个迭代类别 |
-
 
 ## 详细参数
 

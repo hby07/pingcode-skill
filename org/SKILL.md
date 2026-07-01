@@ -1,11 +1,10 @@
 ---
 name: pingcode-org
-description: "企业信息、成员、部门、团队、角色、职位、安全日志、全局配置 — 组织管理 相关的 PingCode REST API。需要查看具体接口参数时读取本目录 APIs.md。"
+description: "企业信息、成员、部门、团队、角色、职位、安全日志 — 组织管理 相关的 PingCode REST API。需要查看具体接口参数时读取本目录 APIs.md。"
 metadata:
   qwenpaw:
     emoji: "🏢"
     requires:
-      bins: ["python3"]
       env: ["PINGCODE_CLIENT_ID", "PINGCODE_CLIENT_SECRET"]
 ---
 
@@ -13,7 +12,7 @@ metadata:
 
 ## 概述
 
-企业信息、成员、部门、团队、角色、职位、安全日志、全局配置
+企业信息、成员、部门、团队、角色、职位、安全日志
 
 本模块包含 **50** 个 API 接口。
 
@@ -27,8 +26,33 @@ metadata:
 | `PINGCODE_CLIENT_SECRET` | 应用 Client Secret |
 | `PINGCODE_BASE_URL` | API 根地址（可选，默认 `https://open.pingcode.com`）|
 
+**认证流程：** 详见 `auth/SKILL.md`
+
 ## 调用方式
 
+使用任意 HTTP 客户端，先获取 token，再调用 API：
+
+**curl:**
+```bash
+curl -s -H "Authorization: Bearer $TOKEN" "https://open.pingcode.com/v1/myself"
+```
+
+**Python:**
+```python
+import urllib.request, json
+req = urllib.request.Request(base_url + "/v1/myself")
+req.add_header("Authorization", "Bearer " + token)
+result = json.loads(urllib.request.urlopen(req).read())
+```
+
+**Go:**
+```go
+req, _ := http.NewRequest("GET", baseURL+"/v1/myself", nil)
+req.Header.Set("Authorization", "Bearer "+token)
+resp, _ := http.DefaultClient.Do(req)
+```
+
+或使用附带的 Python 便捷脚本：
 ```bash
 python3 {{baseDir}}/../scripts/pingcode.py '{{"method":"GET","path":"/v1/myself"}}'
 ```
@@ -87,7 +111,6 @@ python3 {{baseDir}}/../scripts/pingcode.py '{{"method":"GET","path":"/v1/myself"
 | `GET` | `/v1/directory/departments/{department_id}` | 获取一个部门 |
 | `GET` | `/v1/directory/departments` | 获取部门列表 |
 | `PATCH` | `/v1/directory/departments/{department_id}` | 部分更新一个部门 |
-
 
 ## 详细参数
 
