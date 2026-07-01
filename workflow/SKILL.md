@@ -36,7 +36,16 @@
 | 类型 | 目的 | 时机 |
 |------|------|------|
 | **Wiki 文档** | 供团队阅读和审核 | 随时可以创建 |
-| **工作项（需求/任务）** | 正式的需求管理 | 文档审核通过后创建
+| **工作项（需求/任务）** | 正式的需求管理 | 文档审核通过后创建 |
+
+### 必须遵循产品开发生命周期
+
+**所有工作流必须遵循 `LIFECYCLE.md` 中定义的产品开发生命周期，不得跳过阶段。**
+
+完整流程：
+```
+Phase 1: 产品设计（PRD）→ Phase 2: 技术设计 → Phase 3: 任务拆解 → Phase 4: 开发 → Phase 5: 测试 → Phase 6: 发布
+```
 
 ---
 
@@ -46,18 +55,24 @@
 
 | 用户意图 | 工作流 | 入口文件 |
 |----------|--------|----------|
+| "帮我设计产品" | 产品设计 | `design/brainstorming.md` |
+| "写技术设计" | 技术设计 | `design/technical_design.md` |
 | "帮我做 Sprint 计划" | Sprint 计划 | `scrum/sprint_planning.md` |
 | "开始开发任务" | 每日开发 | `scrum/daily_development.md` |
-| "生成文档" | 文档生成 | `documentation/generation_guide.md` |
-| "帮我设计产品" | 产品设计 | `design/brainstorming.md` |
 | "做代码审查" | 代码审查 | `devops/code_review.md` |
 | "管理缺陷" | 缺陷分诊 | `scrum/bug_triage.md` |
 | "准备发布" | 发布管理 | `devops/release_management.md` |
+| "生成文档" | 文档生成 | `documentation/generation_guide.md` |
 | "生成报告" | 项目度量 | `scrum/metrics_report.md` |
 
 ---
 
 ## 工作流分类
+
+### 🎨 产品设计类
+
+- `design/brainstorming.md` — 头脑风暴与 PRD 生成
+- `design/technical_design.md` — 技术设计文档生成
 
 ### 📋 项目管理类
 
@@ -72,12 +87,6 @@
 - `documentation/generation_guide.md` — 文档生成指南
 - `documentation/templates/` — 文档模板目录
 
-### 🎨 产品设计类
-
-- `design/brainstorming.md` — 头脑风暴引导
-- `design/user_story_mapping.md` — 用户故事地图
-- `design/prd_generation.md` — PRD 生成
-
 ### 🔧 DevOps 类
 
 - `devops/code_review.md` — 代码审查流程
@@ -90,17 +99,19 @@
 ```
 1. 读取用户意图
    ↓
-2. 匹配工作流类型
+2. 检查前置条件（参考 LIFECYCLE.md）
    ↓
-3. 读取对应工作流文档
+3. 匹配工作流类型
    ↓
-4. 展示工作流步骤
+4. 读取对应工作流文档
    ↓
-5. 用户确认开始
+5. 展示工作流步骤
    ↓
-6. 按步骤执行（每步确认）
+6. 用户确认开始
    ↓
-7. 完成并汇报
+7. 按步骤执行（每步确认）
+   ↓
+8. 完成并引导进入下一阶段
 ```
 
 ---
@@ -108,6 +119,8 @@
 ## 注意事项
 
 - 所有工作流都基于 `interactive_framework.md` 的交互原则
+- 所有工作流必须遵循 `LIFECYCLE.md` 的生命周期
 - 任何写入操作都需要用户确认
 - 用户可随时输入「取消」终止工作流
 - 工作流状态会保存，支持中断后恢复
+- 每个阶段完成后，必须引导用户进入下一阶段
