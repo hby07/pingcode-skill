@@ -4,6 +4,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![PingCode API](https://img.shields.io/badge/PingCode%20API-v1-blue.svg)](https://open.pingcode.com/)
+[![OpenCode](https://img.shields.io/badge/OpenCode-compatible-blue.svg)](https://opencode.ai)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-green.svg)](https://claude.ai)
+[![QwenPaw](https://img.shields.io/badge/QwenPaw-compatible-orange.svg)](https://github.com/QwenPaw/QwenPaw)
 
 ## 这是什么
 
@@ -16,6 +19,35 @@
 - ✍️ 回写评论、更新状态、上传附件
 
 **核心场景：** Agent 从 PingCode 读取需求 → 实现需求 → 将结果回写 PingCode
+
+---
+
+## 🚀 快速安装
+
+### 方法一：Agent 自动安装（推荐）
+
+将以下提示词发送给你的 AI Agent：
+
+```
+请帮我安装 pingcode-skill：
+1. 从 https://github.com/hby07/pingcode-skill 克隆仓库
+2. 检测当前 agent 类型并安装到正确的 skills 目录
+3. 配置环境变量 PINGCODE_CLIENT_ID 和 PINGCODE_CLIENT_SECRET
+4. 验证安装成功
+```
+
+### 方法二：手动安装
+
+```bash
+git clone https://github.com/hby07/pingcode-skill.git
+cp -r pingcode-skill .opencode/skills/pingcode  # OpenCode
+# 或 .claude/skills/pingcode  # Claude Code
+# 或 ~/.agents/skills/pingcode  # 通用
+```
+
+**详细安装说明：** 查看 [INSTALL.md](INSTALL.md)
+
+---
 
 ## 特性
 
@@ -30,6 +62,8 @@
 ```
 pingcode-skill/
 ├── SKILL.md                    # 🚪 路由入口（模块索引）
+├── INSTALL.md                  # 📖 安装指南
+├── AGENT_INSTALL_PROMPT.md     # 🤖 Agent 自动安装提示词
 ├── auth/                       # 🔑 认证与鉴权（含 curl/Python/Go 示例）
 ├── org/                        # 🏢 组织管理
 ├── product/                    # 📦 产品管理

@@ -2,13 +2,33 @@
 name: pingcode
 description: "PingCode REST API 全模块索引：组织管理、产品、工作项、代码、测试、发布、计划、知识库、项目管理。根据用户意图加载对应模块的 SKILL.md 和 APIs.md，通过 HTTP 请求调用 API。"
 metadata:
+  version: "1.0.0"
+  author: "hby07"
+  license: "MIT"
+  homepage: "https://github.com/hby07/pingcode-skill"
+  compatibility:
+    - "OpenCode"
+    - "Claude Code"
+    - "QwenPaw"
+    - "Cursor"
+    - "任何支持 skills 目录的 Agent"
+  requires:
+    env: ["PINGCODE_CLIENT_ID", "PINGCODE_CLIENT_SECRET"]
   qwenpaw:
     emoji: "🔗"
-    requires:
-      env: ["PINGCODE_CLIENT_ID", "PINGCODE_CLIENT_SECRET"]
 ---
 
 # PingCode API Skill
+
+## 安装
+
+**快速安装：** 将 `AGENT_INSTALL_PROMPT.md` 中的提示词发送给你的 Agent，自动完成安装。
+
+**手动安装：** 查看 `INSTALL.md` 获取详细的安装步骤。
+
+**支持的 Agent：** OpenCode、Claude Code、QwenPaw、Cursor，以及任何支持 skills 目录的 Agent。
+
+---
 
 ## 概述
 
