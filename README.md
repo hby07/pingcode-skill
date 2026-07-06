@@ -61,13 +61,14 @@ cp -r pingcode-skill .opencode/skills/pingcode  # OpenCode
 
 ```
 pingcode-skill/
-├── SKILL.md                    # 🚪 路由入口（模块索引）
+├── SKILL.md                    # 🚪 路由入口（模块索引 + 规则）
 ├── INSTALL.md                  # 📖 安装指南
 ├── AGENT_INSTALL_PROMPT.md     # 🤖 Agent 自动安装提示词
-├── auth/                       # 🔑 认证与鉴权（含 curl/Python/Go 示例）
+├── REFERENCE.md                # 📖 多语言完整调用参考
+├── auth/                       # 🔑 认证与鉴权
 ├── org/                        # 🏢 组织管理
 ├── product/                    # 📦 产品管理
-├── workitem/                   # 📋 工作项
+├── workitem/                   # 📋 工作项（最常用）
 ├── code/                       # 💻 代码管理
 ├── test/                       # 🧪 测试管理
 ├── release/                    # 🚀 交付与发布
@@ -77,9 +78,10 @@ pingcode-skill/
 ├── project_config/             # 🔧 项目配置中心
 ├── workflow/                   # 🔄 工作流示例
 ├── scripts/                    # 🔧 可选 Python 脚本
-│   ├── pingcode.py             #    通用调用脚本
-│   ├── generate_docs.py        #    API 文档生成器
-│   └── .env.example            #    凭据模板
+│   ├── pingcode.py             # 通用调用脚本
+│   ├── generate_docs.py        # API 文档生成器
+│   └── .env.example            # 凭据模板
+├── REFERENCE.md                # 📖 多语言完整调用参考
 ├── README.md
 ├── CONTRIBUTING.md
 └── LICENSE
@@ -87,8 +89,8 @@ pingcode-skill/
 
 每个模块包含：
 
-- `SKILL.md` — 模块说明 + API 列表（轻量，2-10KB）
-- `APIs.md` — 完整参数表、请求体、返回字段（详细）
+- `SKILL.md` — 模块说明 + 快速调用 + 常用 API（轻量，< 2KB）
+- `APIs.md` — 完整参数表、请求体、返回字段（按需加载）
 
 ## 快速开始
 
@@ -105,14 +107,8 @@ export PINGCODE_CLIENT_SECRET="your_client_secret"
 
 ### 3. 测试连通性
 
-**curl:**
 ```bash
 curl -s "https://open.pingcode.com/v1/auth/token?grant_type=client_credentials&client_id=$PINGCODE_CLIENT_ID&client_secret=$PINGCODE_CLIENT_SECRET"
-```
-
-**Python（可选）:**
-```bash
-python3 scripts/pingcode.py '{"method":"GET","path":"/v1/myself"}'
 ```
 
 ### 4. 在 Agent 中使用
@@ -124,72 +120,46 @@ python3 scripts/pingcode.py '{"method":"GET","path":"/v1/myself"}'
 cp -r pingcode-skill .agent/skills/pingcode
 ```
 
-## 多语言调用示例
+## 多语言调用参考
 
-### curl
-
-```bash
-# 获取令牌
-TOKEN=$(curl -s "https://open.pingcode.com/v1/auth/token?grant_type=client_credentials&client_id=$PINGCODE_CLIENT_ID&client_secret=$PINGCODE_CLIENT_SECRET" | python3 -c "import sys,json;print(json.load(sys.stdin)['access_token'])")
-
-# 调用 API
-curl -s -H "Authorization: Bearer $TOKEN" "https://open.pingcode.com/v1/pjm/work_items?project_id=xxx"
-```
-
-### Python
-
-```python
-import json, os, urllib.request
-
-base = "https://open.pingcode.com"
-cid = os.environ["PINGCODE_CLIENT_ID"]
-csec = os.environ["PINGCODE_CLIENT_SECRET"]
-
-# 获取令牌
-url = f"{base}/v1/auth/token?grant_type=client_credentials&client_id={cid}&client_secret={csec}"
-token = json.loads(urllib.request.urlopen(url).read())["access_token"]
-
-# 调用 API
-req = urllib.request.Request(f"{base}/v1/pjm/work_items?project_id=xxx")
-req.add_header("Authorization", f"Bearer {token}")
-result = json.loads(urllib.request.urlopen(req).read())
-```
-
-### Go
-
-```go
-// 获取令牌
-authURL := fmt.Sprintf("%s/v1/auth/token?grant_type=client_credentials&client_id=%s&client_secret=%s", base, cid, csec)
-resp, _ := http.Get(authURL)
-body, _ := io.ReadAll(resp.Body)
-var tokenResp struct { AccessToken string `json:"access_token"` }
-json.Unmarshal(body, &tokenResp)
-
-// 调用 API
-req, _ := http.NewRequest("GET", base+"/v1/pjm/work_items?project_id=xxx", nil)
-req.Header.Set("Authorization", "Bearer "+tokenResp.AccessToken)
-resp, _ = http.DefaultClient.Do(req)
-```
+每个模块的 SKILL.md 只展示 curl 示例（最通用、零依赖）。  
+如需 **Python**、**Go**、**Node.js** 的完整调用代码，见 [`REFERENCE.md`](REFERENCE.md)。
 
 ## 模块速查
 
-| 模块 | 说明 | API 数 |
-|------|------|--------|
-| `auth` | 企业令牌、用户授权 | 6 |
-| `org` | 企业、成员、部门、团队 | 50 |
-| `product` | 产品、工单、客户 | 85 |
-| `workitem` | 需求、任务、缺陷、评论 | 94 |
-| `code` | 仓库、分支、PR、评审 | 44 |
-| `test` | 用例、执行、测试库 | 70 |
-| `release` | 构建、部署、发布 | 42 |
-| `plan` | 迭代、计划、路线图 | 34 |
-| `wiki` | 知识空间、页面 | 21 |
-| `project` | 项目、看板、配置 | 45 |
-| `project_config` | 字段、状态、类型配置 | 75 |
+| 模块 | 触发场景 | API 数 |
+|------|----------|--------|
+| `auth` | 🔑 需要获取/刷新 API 令牌 | 6 |
+| `org` | 🏢 管理成员、部门、团队 | 50 |
+| `product` | 📦 管理产品、工单、客户 | 85 |
+| `workitem` | 📋 操作需求、任务、缺陷、评论 | 94 |
+| `code` | 💻 管理仓库、分支、PR | 44 |
+| `test` | 🧪 测试用例与执行 | 70 |
+| `release` | 🚀 构建、部署、发布 | 42 |
+| `plan` | 📅 迭代、计划、路线图 | 34 |
+| `wiki` | 📚 知识空间与页面 | 21 |
+| `project` | ⚙️ 项目、看板 | 45 |
+| `project_config` | 🔧 字段、状态、类型配置 | 75 |
+
+## Before / After：用与不用本 Skill 的对比
+
+### ❌ Before（没有 Skill）
+
+> 用户："帮我查一下 PingCode 里这个迭代的 Bug 数量"
+>
+> Agent：打开浏览器 → 手动搜 PingCode API → 看文档 → 试错 → 被 401 卡住 → …
+> **耗时：5-10 分钟，容易出错**
+
+### ✅ After（有了本 Skill）
+
+> 用户："帮我查一下 PingCode 里这个迭代的 Bug 数量"
+>
+> Agent：读 `auth/SKILL.md` → 获取 token → 读 `workitem/SKILL.md` → 调用 GET work_items → 按 `work_item_type_id` 过滤 → 返回结果
+> **耗时：30 秒，一次成功**
 
 ## 工作流
 
-详见 `workflow/apis.md`，包含：
+详见 `workflow/apis.md`：
 
 - **需求实现回写** — 读取需求 → 实现 → 回写评论 → 更新状态
 - **代码关联** — 创建分支 → 关联提交 → 创建 PR
